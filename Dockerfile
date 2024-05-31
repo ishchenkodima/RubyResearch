@@ -1,14 +1,21 @@
+# Вказати базовий образ
+FROM ruby:2.7
 
-#### Пункт 2: Створення Dockerfile
+# Встановити залежності
+RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
-```Dockerfile
-FROM ruby:3.1
+# Встановити робочий каталог
+WORKDIR /myapp
 
-WORKDIR /app
+# Скопіювати Gemfile та Gemfile.lock у робочий каталог
+COPY Gemfile /myapp/Gemfile
+COPY Gemfile.lock /myapp/Gemfile.lock
 
-COPY Gemfile Gemfile.lock ./
+# Встановити геми
 RUN bundle install
 
-COPY . .
+# Скопіювати решту коду додатку
+COPY . /myapp
 
-CMD ["rspec"]
+# Вказати команду, яку слід виконати при запуску контейнера
+CMD ["rails", "server", "-b", "0.0.0.0"]
