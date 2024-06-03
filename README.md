@@ -1,13 +1,18 @@
-# Memory Management in Ruby
+# RubyResearch
 
-## Introduction
+This project demonstrates memory management concepts in Ruby including value types, reference types, stack and heap allocation, and garbage collection.
 
-This project demonstrates memory management in Ruby, focusing on concepts such as value types, reference types, garbage collection, and passing arguments by value and by reference. It also shows how to create objects on the stack and the heap and provides unit tests to validate these concepts.
+## Concepts
 
-## Running the Tests
+- **Value Types**: In Ruby, primitive data types like integers are value types. When assigned to another variable, a copy is made.
+- **Reference Types**: Objects like arrays are reference types. When assigned to another variable, both variables reference the same object.
+- **Stack and Heap**: Primitive data types are usually stored on the stack, while objects are stored on the heap.
+- **Garbage Collection**: Ruby has a built-in garbage collector that automatically frees memory that is no longer in use.
 
-To run the tests, you need to have Docker installed. Follow these steps:
+## Running Tests
 
-1. Build the Docker image:
-   ```sh
-   docker-compose build
+To run the tests, use the following commands:
+
+```bash
+docker-compose build
+docker-compose run ruby_tests
