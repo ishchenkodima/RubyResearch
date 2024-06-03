@@ -1,21 +1,10 @@
-# Вказати базовий образ
-FROM ruby:2.7
+FROM ruby:3.1
 
-# Встановити залежності
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+WORKDIR /app
 
-# Встановити робочий каталог
-WORKDIR /myapp
-
-# Скопіювати Gemfile та Gemfile.lock у робочий каталог
-COPY Gemfile /myapp/Gemfile
-COPY Gemfile.lock /myapp/Gemfile.lock
-
-# Встановити геми
+COPY Gemfile* ./
 RUN bundle install
 
-# Скопіювати решту коду додатку
-COPY . /myapp
+COPY . .
 
-# Вказати команду, яку слід виконати при запуску контейнера
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "rspec"]
