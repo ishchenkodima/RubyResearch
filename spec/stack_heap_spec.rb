@@ -13,45 +13,46 @@ class StackHeapTest
   end
 end
 
-def print_heap_size
+def get_heap_size
   GC.start
-  puts "Current heap size: #{ObjectSpace.memsize_of_all / 1024.0} KB"
+  ObjectSpace.memsize_of_all
 end
 
 RSpec.describe StackHeapTest do
   let(:test_class) { StackHeapTest.new }
 
   it 'creates a local variable on the stack' do
-    print_heap_size
+    initial_heap_size = get_heap_size
     var = test_class.local_variable
-    print_heap_size
+    expect(get_heap_size).to eq(initial_heap_size)
     expect(var).to eq("local")
   end
 
   it 'creates an object on the heap' do
-    print_heap_size
+    initial_heap_size = get_heap_size
     var = test_class.heap_object
-    print_heap_size
+    expect(get_heap_size).to be > initial_heap_size
     expect(var).to eq("heap")
   end
 
   it 'measures heap size before and after creating value and reference types' do
-    puts "Before creating objects:"
-    print_heap_size
+    initial_heap_size = get_heap_size
 
     # Створюємо масив цілих чисел (value types)
     value_types = Array.new(100_000) { rand(1..100) }
-    puts "After creating value types:"
-    print_heap_size
+    value_types_heap_size = get_heap_size
+    expect(value_types_heap_size).to eq(initial_heap_size)
 
     # Створюємо масив рядків (reference types)
     reference_types = Array.new(100_000) { "string_#{rand(1..100)}" }
-    puts "After creating reference types:"
-    print_heap_size
+    reference_types_heap_size = get_heap_size
+    expect(reference_types_heap_size).to be > value_types_heap_size
 
     # Виконуємо збірку сміття
+    reference_types = nil
     GC.start
-    puts "After garbage collection:"
-    print_heap_size
+    after_gc_heap_size = get_heap_size
+    expect(after_gc_heap_size).to be < reference_types_heap_size
   end
 end
+
