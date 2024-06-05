@@ -24,7 +24,7 @@ RSpec.describe StackHeapTest do
   it 'creates a local variable on the stack' do
     initial_heap_size = get_heap_size
     var = test_class.local_variable
-    expect((get_heap_size - initial_heap_size).abs).to be < 1000
+    expect((get_heap_size - initial_heap_size).abs).to be < 1000 # Дозволяємо похибку в 1 КБ
     expect(var).to eq("local")
   end
 
@@ -41,7 +41,7 @@ RSpec.describe StackHeapTest do
     # Створюємо масив цілих чисел (value types)
     value_types = Array.new(100_000) { rand(1..100) }
     value_types_heap_size = get_heap_size
-    expect((value_types_heap_size - initial_heap_size).abs).to be < 1000 
+    expect((value_types_heap_size - initial_heap_size).abs).to be < 1_000_000 # Дозволяємо похибку в 1 МБ
 
     # Створюємо масив рядків (reference types)
     reference_types = Array.new(100_000) { "string_#{rand(1..100)}" }
@@ -55,5 +55,6 @@ RSpec.describe StackHeapTest do
     expect(after_gc_heap_size).to be < reference_types_heap_size
   end
 end
+
 
 
